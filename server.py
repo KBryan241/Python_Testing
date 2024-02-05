@@ -32,7 +32,11 @@ def showSummary():
         flash("Enter a valid email please")
         return render_template('index.html')
     
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
+    club = next((club for club in clubs if club['email'] == email),None) #next permet d'obtenir le premier element d'une liste genere
+    if not club:
+        flash("No clubs exist for this email")
+        return render_template('index.html')
+    
     return render_template('welcome.html',club=club,competitions=competitions)
 
 
