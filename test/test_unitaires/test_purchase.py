@@ -19,5 +19,9 @@ class Test_purchased_place(unittest.TestCase):
         response = self.client.post('/purchasePlaces',data={'places':''})
         self.assertEqual(response.status_code,400)
 
+    def test_with_not_enough_point(self):
+        response = self.client.post('/purchasePlaces',data={'places':'250'})
+        self.assertEqual(response.status_code,400)
+
 if __name__ == '__main__':
     unittest.main
