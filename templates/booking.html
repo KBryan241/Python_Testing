@@ -28,12 +28,12 @@
             margin-top: 0;
         }
 
-        .flash-messages {
+        .flashes {
             margin-top: 20px;
             text-align: center;
         }
 
-        .flash-message {
+        .flashes {
             color: #ff0000;
         }
 
@@ -73,12 +73,16 @@
             margin-top: 20px;
             text-align: center;
         }
+        h4 {
+            margin-top: 20px;
+            text-align: center;
+        }
 
     </style>
 </head>
 <body>
     <h2>{{competition['name']}}</h2>
-    Places available: {{competition['numberOfPlaces']}}
+<h4>Places available: <strong style="color: #3498db;">{{competition['numberOfPlaces']}}</strong> </h4> 
     <form action="/purchasePlaces" method="post">
         <input type="hidden" name="club" value="{{club['name']}}">
         <input type="hidden" name="competition" value="{{competition['name']}}">
@@ -89,7 +93,7 @@
     {% if messages %}
         <ul class="flashes">
         {% for message in messages %}
-            <li>{{ message }}</li>
+            {{ message }}
         {% endfor %}
         </ul>
     {% endif %}

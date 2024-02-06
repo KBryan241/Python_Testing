@@ -29,5 +29,6 @@ class Test_connnexion(unittest.TestCase):
         response = self.client.post('/showSummary',data={'email':'email@email.com'})
         self.assertIn(b'No clubs exist for this email',response.data)
         self.assertEqual(response.status_code,200)
+
 if __name__ == '__main__':
     unittest.main

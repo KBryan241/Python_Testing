@@ -72,14 +72,15 @@
         h2 {
             margin-top: 20px;
             text-align: center;
+            color: #fff
         }
         
     </style>
 </head>
 <body>
-    <div style="background-color: #2980b9;" class="container-fluid">
-        <h2>Welcome, {{club['email']}} </h2></div>
-        <a href="{{url_for('logout')}}">Logout</a>
+    <div style="background-color: #3498db;" class="container">
+        <h2>Welcome, {{club['name']}} </h2></div>
+        <a style="margin: 10px;" href="{{url_for('logout')}}"><i class="fa-solid fa-right-from-bracket fa-3x"></i> Logout</a> <br>
 
     {% with messages = get_flashed_messages()%}
     {% if messages %}
