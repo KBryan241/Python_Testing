@@ -1,5 +1,6 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
+from datetime import datetime
 
 
 def loadClubs():
@@ -12,6 +13,8 @@ def loadCompetitions():
     with open('competitions.json') as comps:
         listOfCompetitions = json.load(comps)['competitions']
         return listOfCompetitions
+    
+
 
 
 app = Flask(__name__)
@@ -19,25 +22,28 @@ app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
-
+today= datetime.now()
 @app.route('/')
 def index():
-    return render_template('index.html',clubs=clubs,competitions=competitions)
+    comp = [competition for competition in competitions if datetime.strptime(competition['date'], "%Y-%m-%d %H:%M:%S") >= today]
+
+    return render_template('index.html',clubs=clubs,competitions=comp)
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
+    comp = [competition for competition in competitions if datetime.strptime(competition['date'], "%Y-%m-%d %H:%M:%S") >= today]
     email = request.form['email']
     # password = request.form['password']
     if not email :
         flash("Enter a valid email please")
-        return render_template('index.html',clubs=clubs,competitions=competitions)
+        return render_template('index.html',clubs=clubs,competitions=comp)
     
     club = next((club for club in clubs if club['email'] == email),None) #next permet d'obtenir le premier element d'une liste genere
     if not club:
         flash("No clubs exist for this email")
-        return render_template('index.html',clubs=clubs,competitions=competitions)
+        return render_template('index.html',clubs=clubs,competitions=comp)
     
-    return render_template('welcome.html',club=club,competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=comp)
 
 
 @app.route('/book/<competition>/<club>')
