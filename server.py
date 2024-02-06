@@ -22,7 +22,7 @@ clubs = loadClubs()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',clubs=clubs,competitions=competitions)
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
@@ -30,12 +30,12 @@ def showSummary():
     # password = request.form['password']
     if not email :
         flash("Enter a valid email please")
-        return render_template('index.html')
+        return render_template('index.html',clubs=clubs,competitions=competitions)
     
     club = next((club for club in clubs if club['email'] == email),None) #next permet d'obtenir le premier element d'une liste genere
     if not club:
         flash("No clubs exist for this email")
-        return render_template('index.html')
+        return render_template('index.html',clubs=clubs,competitions=competitions)
     
     return render_template('welcome.html',club=club,competitions=competitions)
 
