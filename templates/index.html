@@ -1,16 +1,63 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUDLFT Registration</title>
-</head>
-<body>
-    <h1>Welcome to the GUDLFT Registration Portal!</h1>
-    Please enter your secretary email to continue:
+{% extends 'base.html' %}
+
+{% block content %}
+    <header>
+        <h1>Welcome to the GUDLFT Registration Portal!</h1>
+    </header>
+    <h3>    Please enter your secretary email to continue:</h3>
     <form action="showSummary" method="post">
-        <label for="email">Email:</label>
         <input type="email" name="email" id=""/>
         <button type="submit">Enter</button>
     </form>
-</body>
-</html>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flashes">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <h2>CLUB DETAILS</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>POINT AVAILABLE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for club in clubs %}
+                <tr>
+                    <td>{{ club['name'] }}</td>
+                    <td>{{ club['email'] }}</td>
+                    <td>{{ club['points'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h2>COMPETITIONS DETAILS</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>NAME</th>
+                <th>DATE</th>
+                <th>NUMBER OF PLACES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comp in competitions %}
+                <tr>
+                    <td>{{ comp['name'] }}</td>
+                    <td>{{ comp['date'] }}</td>
+                    <td>{{ comp['numberOfPlaces'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock content %}

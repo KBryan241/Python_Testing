@@ -37,7 +37,7 @@
         }
 
         .flashes {
-            color: green;
+            color: #ff0000;
         }
 
         form {
@@ -109,13 +109,13 @@
         a:hover{
             color: #f4f4f4;
         }
-        .bk{
+        .nav-item{
+            color: #333;
+            border: none;
+        }
+        .nav-item:hover{
             color: #f4f4f4;
         }
-        .bk:hover{
-            color: #333;
-        }
-        
     </style>
 
 </head>
@@ -126,43 +126,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
-            <div style="margin-left:40% ;margin-top: 7px;">
-                <a  href="{{url_for('logout')}}"><strong>Logout</strong> </a>
-
-            </div>
+            <a class="nav-item " href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
         </div>
-    </div>
+        </div>
     </nav>
 
-    <header>
-        <h2>Welcome, {{club['name']}} </h2>
-    </header>
-    {% with messages = get_flashed_messages()%}
-    {% if messages %}
-        <ul>
-    {% for message in messages %}
-            <li>{{message}}</li>
-        {% endfor %}
-    </ul>
-    {% endif%}
-    Points available: <strong style="color: #3498db;"> {{club['points']}} </strong> 
-    <h3>Competitions:</h3>
-    <ul>
-        {% for comp in competitions%}
-        <li>
-            {{comp['name']}}<br />
-            Date: {{comp['date']}}</br>
-            Number of Places: <strong style="color: #3498db;">{{comp['numberOfPlaces']}}</strong> 
-            {%if comp['numberOfPlaces']|int >0%}
-            <button> <a class="bk" href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a></button>
-            
-            {%endif%}
-        </li>
-        <hr />
-        {% endfor %}
-    </ul>
-    {%endwith%}
+    {% block content %}
+
+    {% endblock content %}
+
 
 </body>
 </html>
