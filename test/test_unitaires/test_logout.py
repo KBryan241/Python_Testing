@@ -1,12 +1,11 @@
 import sys
 from pathlib import Path
+import unittest
+from server import app, logout
+from flask import Flask, url_for, session
 
 project_root = Path(__file__).resolve().parent.parent
-sys.path.insert(0,str(project_root))
-
-import unittest
-from server import app,logout
-from flask import Flask, url_for, session
+sys.path.insert(0, str(project_root))
 
 class TestLogout(unittest.TestCase):
 

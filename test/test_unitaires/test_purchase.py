@@ -1,23 +1,20 @@
 import sys
+import unittest
+from flask import Flask
+from server import app
 from pathlib import Path
 
 project_root = Path(__file__).resolve().parent.parent
-sys.path.insert(0,str(project_root))
-
-import unittest
-from flask import Flask,render_template, request, redirect, flash, url_for
-from unittest.mock import patch
-from server import app,purchasePlaces, clubs as c, competitions as comp 
-
+sys.path.insert(0, str(project_root))
 
 class Test_purchased_place(unittest.TestCase):
     def setUp(self):
         self.app = Flask(__name__)
-        app.config['TESTING']= True
-        self.client= app.test_client()
+        app.config['TESTING'] = True
+        self.client = app.test_client()
 
     def test_with_not_enough_point(self):
-        response = self.client.post('/purchasePlaces', data = {'places':'250'}, follow_redirects = True)
+        response = self.client.post('/purchasePlaces', data = {'places': '250'}, follow_redirects = True)
         self.assertEqual(response.status_code, 400)
 
     def test_insuficiant_Places(self):
@@ -32,7 +29,7 @@ class Test_purchased_place(unittest.TestCase):
 
     def test_purchase_places_success(self):
         # Set up the request data
-        request_data = { 'competition': 'Spring Festival',
+        request_data = {'competition': 'Spring Festival',
             'club': 'Iron Temple',
             'places': '3'
             }
