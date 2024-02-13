@@ -14,7 +14,7 @@ class TestLogout(unittest.TestCase):
         self.app = app.test_client()
 
     def test_logout_redirects_to_index(self):
-        response = self.app.get('/logout', follow_redirects=True)
+        response = self.app.get('/logout', follow_redirects = True)
         self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':

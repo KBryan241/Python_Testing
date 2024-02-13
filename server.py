@@ -1,5 +1,5 @@
 import json
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask, render_template, request, redirect, flash, url_for
 from datetime import datetime
 
 
@@ -16,20 +16,17 @@ def loadCompetitions():
         listOfCompetitions = json.load(comps)['competitions']
         return listOfCompetitions
     
-
-
-
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
-today= datetime.now()
+today = datetime.now()
 @app.route('/')
 def index():
     comp = [competition for competition in competitions if datetime.strptime(competition['date'], "%Y-%m-%d %H:%M:%S") >= today]
 
-    return render_template('index.html',clubs=clubs,competitions=comp)
+    return render_template('index.html', clubs=clubs, competitions=comp)
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
@@ -38,14 +35,14 @@ def showSummary():
     # password = request.form['password']
     if not email :
         flash("Enter a valid email please")
-        return render_template('index.html',clubs=clubs,competitions=comp)
+        return render_template('index.html', clubs=clubs, competitions=comp)
     
-    club = next((club for club in clubs if club['email'] == email),None) #next permet d'obtenir le premier element d'une liste genere
+    club = next((club for club in clubs if club['email'] == email), None) #next permet d'obtenir le premier element d'une liste genere
     if not club:
         flash("No clubs exist for this email")
-        return render_template('index.html',clubs=clubs,competitions=comp)
+        return render_template('index.html', clubs = clubs, competitions = comp)
     
-    return render_template('welcome.html', club=club, competitions=comp)
+    return render_template('welcome.html', club = club, competitions = comp)
 
 
 @app.route('/book/<competition>/<club>')
@@ -56,7 +53,7 @@ def book(competition,club):
         return render_template('booking.html',club=foundClub,competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club = club, competitions = competitions)
 
 
 @app.route('/purchasePlaces',methods=['POST'])
