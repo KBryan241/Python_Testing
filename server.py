@@ -6,6 +6,8 @@ from datetime import datetime
 def loadClubs():
     with open('clubs.json') as c:
         listOfClubs = json.load(c)['clubs']
+        for club in listOfClubs:
+            club['total_reserved'] = 0  # Initialiser 'total_reserved' pour chaque club
         return listOfClubs
 
 
@@ -59,24 +61,33 @@ def book(competition,club):
 
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
-    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
+    competition = next((c for c in competitions if c['name'] == request.form['competition']), None)
+    club = next((c for c in clubs if c['name'] == request.form['club']), None)
     placesRequired = int(request.form['places'])
     
-    if int(club['points'])< placesRequired:
-        flash("Your points is not enough")
-        return redirect(url_for('book',competition=competition['name'],club=club['name']))
+    if not competition or not club:
+        flash("Invalid competition or club")
+        return redirect(url_for('book', competition=competition['name'], club=club['name']))
     
-
-    if placesRequired>int(competition['numberOfPlaces']):
+    if int(club['points']) < placesRequired:
+        flash("Your points is not enough")
+        return redirect(url_for('book', competition=competition['name'], club=club['name']))
+    
+    total_reserved = club['total_reserved'] + placesRequired
+    if total_reserved > 12 and competition['name'] == club['last_competition']:
+        flash("Your club has already purchased 12 places for this competition")
+        return redirect(url_for('book', competition=competition['name'], club=club['name']))
+    
+    if placesRequired > int(competition['numberOfPlaces']):
         flash("No place available for this competition")
-        return redirect(url_for('book',competition=competition['name'],club=club['name']))
-
+        return redirect(url_for('book', competition=competition['name'], club=club['name']))
+    
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     club['points']=int(club['points'])- placesRequired
+    club['total_reserved'] = total_reserved
+    club['last_competition'] = competition['name']
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
-
 
 # TODO: Add route for points display
 
